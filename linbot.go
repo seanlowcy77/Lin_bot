@@ -2,6 +2,7 @@
 // create own database to store / record number of people using functions
 // send inlinequery to telegram to search pokemon
 // HI Yuan Bo :D
+// ofnweiofnweiofnewiof
 package main
 
 import (
