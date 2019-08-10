@@ -3,6 +3,7 @@
 // send inlinequery to telegram to search pokemon
 // HI Yuan Bo :D
 // ofnweiofnweiofnewiof
+// Testing no 2
 package main
 
 import (
@@ -21,6 +22,7 @@ import (
 
 //cause same directory as main
 
+//
 type linbot struct {
 	Name       string
 	bott       bot
