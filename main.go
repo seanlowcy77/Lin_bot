@@ -8,7 +8,9 @@ import (
 )
 
 func main() {
-	bot, err := api.NewBotAPI("Put Telegram bot key here")
+	tele := new(telekey)
+	tele.setkey()
+	bot, err := api.NewBotAPI(tele.key)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -23,6 +25,7 @@ func main() {
 
 	lin := &linbot{Name: "Lin", bott: bot}
 	lin.PokemonAns = " "
+	lin.setpictures()
 
 	for update := range updates {
 

@@ -1,9 +1,3 @@
-//future projects:
-// create own database to store / record number of people using functions
-// send inlinequery to telegram to search pokemon
-// HI Yuan Bo :D
-// ofnweiofnweiofnewiof
-// Testing no 2
 package main
 
 import (
@@ -33,7 +27,8 @@ type linbot struct {
 }
 
 type pictures struct {
-	sentpictures []string
+	sentpictures  []string
+	arrofpictures []string
 }
 type photoconfig interface {
 	NewPhotoShare(chatID int64, fileID string) api.PhotoConfig
@@ -188,13 +183,18 @@ func (lin *linbot) female(msg *api.Message) {
 	lin.SendTextMessage(int(msg.Chat.ID), text)
 }
 
-// Returns a different picture of Lin each time function is called
-func (lin *linbot) lintime(msg *api.Message) {
-	arr := []string{"/Users/seanlowcy77/lin_bot/pic1.png",
+// Setting the pictures that will be sent by the /lintime function
+func (lin *linbot) setpictures() {
+	lin.pictures.arrofpictures = []string{"/Users/seanlowcy77/lin_bot/pic1.png",
 		"/Users/seanlowcy77/lin_bot/pic2.jpg",
 		"/Users/seanlowcy77/lin_bot/pic3.jpg",
 		"/Users/seanlowcy77/lin_bot/pic4.jpg",
 		"/Users/seanlowcy77/lin_bot/pic5.jpg"}
+}
+
+// Returns a different picture of Lin each time function is called
+func (lin *linbot) lintime(msg *api.Message) {
+	arr := lin.pictures.arrofpictures
 	n := len(arr)
 	i := randomInt(0, n)
 	Sentpictures := lin.pictures.sentpictures
@@ -209,6 +209,7 @@ func (lin *linbot) lintime(msg *api.Message) {
 	}
 }
 
+// Function when the answer is correctly given
 func (lin *linbot) rightpokemon(msg *api.Message) {
 	str := strings.Replace(msg.Text, "/pokemon ", "", 1)
 	if strings.ToLower(str) == strings.ToLower(lin.PokemonAns) {
@@ -240,6 +241,7 @@ func (lin *linbot) uwu(msg *api.Message) {
 	lin.SendTextMessage(int(msg.Chat.ID), str)
 }
 
+// Funtion to send a different sticker each time from an array of stickers
 func (lin *linbot) sendsticker(msg *api.Message) {
 	stickerarr := []string{"CAADAgADzWoBAAFji0YMJh7SqwnpNXQWBA", "CAADAgADk10BAAFji0YMrp5MBok7V1oWBA", "CAADAgADlV0BAAFji0YM4jBzLzwi3FYWBA", "CAADAgAD3nABAAFji0YMLpR9QayvR8oWBA"}
 	n := len(stickerarr)
@@ -258,11 +260,13 @@ func (lin *linbot) sendsticker(msg *api.Message) {
 	}
 }
 
+// Function to echo something
 func (lin *linbot) echo(msg *api.Message) {
 	str1 := strings.Replace(msg.Text, "/echo", "", 1)
 	lin.SendTextMessage(int(msg.Chat.ID), str1)
 }
 
+// Function to provide a countdown
 func (lin *linbot) time(msg *api.Message) {
 	str1 := strings.Replace(msg.Text, "/time ", "", 1)
 	seconds, err := strconv.Atoi(str1)
@@ -278,7 +282,6 @@ func (lin *linbot) time(msg *api.Message) {
 	}
 }
 
-//Surprise
 func (lin *linbot) Surprise(msg *api.Message) {
 	text := "YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET"
 	lin.SendTextMessage(int(msg.Chat.ID), text)
