@@ -14,9 +14,6 @@ import (
 	api "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-//cause same directory as main
-
-//
 type linbot struct {
 	Name       string
 	bott       bot
@@ -39,6 +36,7 @@ type bot interface {
 	GetUpdatesChan(config api.UpdateConfig) (api.UpdatesChannel, error)
 	UploadFile(endpoint string, params map[string]string, fieldname string, file interface{}) (api.APIResponse, error)
 	GetUserProfilePhotos(config api.UserProfilePhotosConfig) (api.UserProfilePhotos, error)
+	KickChatMember(config api.KickChatMemberConfig) (api.APIResponse, error)
 }
 
 // SendTextMessage sends a basic text message back to the specified user.
@@ -158,6 +156,47 @@ func (lin *linbot) handsome(msg *api.Message) {
 		fmt.Println(errr)
 	}
 }
+
+func (lin *linbot) kick(msg *api.Message) {
+	/*wuf := api.ChatMemberConfig{
+		int64(-1001383326579),
+		"Unkickables",
+		"",
+		249291763,
+	}
+	*/
+
+	wuf := api.ChatMemberConfig{
+		int64(-1001275675528),
+		strconv.Itoa(int(-1001275675528)),
+		"",
+		msg.From.ID,
+	}
+	kicking := api.KickChatMemberConfig{
+		wuf,
+		int64(1),
+	}
+	resp, err := lin.bott.KickChatMember(kicking)
+	if err != nil {
+		fmt.Println(err)
+
+	}
+	lin.SendTextMessage(int(msg.Chat.ID), resp.Description)
+
+	/*_, errr := lin.bott.Send(resp)
+	if errr != nil {
+		fmt.Println(errr)
+	}*/
+
+}
+
+/*
+2019/08/19 15:27:25 getUpdates resp: {"ok":true,"result":[{"update_id":589696473,
+"message":{"message_id":1727,"from":{"id":249291763,"is_bot":false,"first_name":"Wu Fan","username":"meowufanya"},
+"chat":{"id":-256943151,"title":"Sleeping Early","type":"group","all_members_are_administrators":false},"date":1566197874,
+"left_chat_participant":{"id":602270437,"is_bot":false,"first_name":"Zijun","username":"zzzijun","language_code":"en"},
+"left_chat_member":{"id":602270437,"is_bot":false,"first_name":"Zijun","username":"zzzijun","language_code":"en"}}}]}
+*/
 
 // Send text message when command male is entered
 func (lin *linbot) male(msg *api.Message) {
