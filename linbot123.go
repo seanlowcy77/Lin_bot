@@ -37,6 +37,8 @@ type bot interface {
 	UploadFile(endpoint string, params map[string]string, fieldname string, file interface{}) (api.APIResponse, error)
 	GetUserProfilePhotos(config api.UserProfilePhotosConfig) (api.UserProfilePhotos, error)
 	KickChatMember(config api.KickChatMemberConfig) (api.APIResponse, error)
+	SetWebhook(config api.WebhookConfig) (api.APIResponse, error)
+	RemoveWebhook() (api.APIResponse, error)
 }
 
 // SendTextMessage sends a basic text message back to the specified user.
