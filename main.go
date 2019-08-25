@@ -1,4 +1,4 @@
-package main
+package linbot123
 
 import (
 	"log"
