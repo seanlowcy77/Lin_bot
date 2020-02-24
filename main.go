@@ -3,40 +3,20 @@ package main
 import (
 
 	api "github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/linbot123/linbot"
 )
 
 func main() {
-<<<<<<< HEAD
 
-    bot, err := api.NewBotAPI("827038812:AAHt9fPuOfg3npfl15q5qTH1BSzBjMoDOko")
-	if err != nil {
-		log.Panic(err)
-	}
-
-	bot.Debug = true
-	log.Printf("Authorized on account %s", bot.Self.UserName)
-
-	u := api.NewUpdate(0)
-	u.Timeout = 100
-
-	updates, err := bot.GetUpdatesChan(u)
-	lin := &linbot{
-		Name: "Lin",
-		bott: bot,
-	}
-	lin.PokemonAns = " "
-=======
-	
-	lin := InitLinBot();
+	lin := linbot.InitLinBot();
 	updates := lin.Listen(60);
-	
->>>>>>> d57fca17605c94610d0d1822c49ce8abc436438e
+
 
 	for update := range updates {
 
 		name := update.Message.LeftChatMember
 		if name != nil {
-			lin.kick(update.Message)
+			lin.Kick(update.Message)
 		}
 		if update.Message == nil { // ignore any non-Message Updates
 			continue
@@ -46,7 +26,7 @@ func main() {
 
 		switch update.Message.Command() {
 		case "aboutme":
-			lin.aboutme(update.Message)
+			lin.Aboutme(update.Message)
 		case "start":
 			lin.Start(update.Message)
 		case "help":
@@ -56,44 +36,44 @@ func main() {
 		case "talk":
 			msg.Text = "You want me to talk? Nahhh"
 		case "status":
-			lin.status(update.Message)
+			lin.Status(update.Message)
 		case "shutup":
 			msg.Text = ">:( Lin bot smash"
 		case "echo":
-			lin.echo(update.Message)
+			lin.Echo(update.Message)
 		case "time":
-			lin.time(update.Message)
+			lin.Time(update.Message)
 		case "uwu":
-			lin.uwu(update.Message)
+			lin.Uwu(update.Message)
 		case "lintime":
-			lin.lintime(update.Message)
+			lin.Lintime(update.Message)
 		case "slurp":
 			msg.Text = "YUMZ"
 		case "WhosethatPokemon":
-			lin.pokemon(update.Message)
+			lin.Pokemon(update.Message)
 		case "playagain":
-			lin.pokemon(update.Message)
+			lin.Pokemon(update.Message)
 		case "pokemon":
-			lin.rightpokemon(update.Message)
+			lin.Rightpokemon(update.Message)
 		case "answer":
 			msg.Text = "Answer is " + lin.PokemonAns + "!!!" + "\n" + "Better luck next time " +
 				update.Message.From.FirstName + " :(" +
 				"\n" + "/playagain"
 		case "male":
-			lin.male(update.Message)
+			lin.Male(update.Message)
 		case "female":
-			lin.female(update.Message)
+			lin.Female(update.Message)
 		case "here":
-			lin.malegenderchecker(update.Message)
+			lin.Malegenderchecker(update.Message)
 		case "cute":
-			lin.handsome(update.Message)
+			lin.Handsome(update.Message)
 		case "icebear":
-			lin.sendsticker(update.Message)
+			lin.Sendsticker(update.Message)
 		case "wufan":
-			lin.sendsticker(update.Message)
+			lin.Sendsticker(update.Message)
 		case "zijun":
-			lin.kick(update.Message)
+			lin.Kick(update.Message)
 		}
-		lin.bot.Send(msg)
+		lin.Bot.Send(msg)
 	}
 }
