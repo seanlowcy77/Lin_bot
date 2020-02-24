@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	bot, err := api.NewBotAPI("946928172:AAGst6bzVn4wb6_5j79DFYq-0yBPHedsMQk")
+    bot, err := api.NewBotAPI("827038812:AAHt9fPuOfg3npfl15q5qTH1BSzBjMoDOko")
 	if err != nil {
 		log.Panic(err)
 	}
