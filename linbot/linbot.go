@@ -16,7 +16,7 @@ import (
 
 type linbot struct {
 	Name       string
-	bott       bot
+	bot       bot
 	photo      photoconfig
 	PokemonAns string
 	stickers   stickers
@@ -31,12 +31,16 @@ type photoconfig interface {
 	NewPhotoShare(chatID int64, fileID string) api.PhotoConfig
 	NewPhotoUpload(chatID int64, file interface{}) api.PhotoConfig
 }
+
+
 type bot interface {
 	Send(c api.Chattable) (api.Message, error)
 	GetUpdatesChan(config api.UpdateConfig) (api.UpdatesChannel, error)
 	UploadFile(endpoint string, params map[string]string, fieldname string, file interface{}) (api.APIResponse, error)
 	GetUserProfilePhotos(config api.UserProfilePhotosConfig) (api.UserProfilePhotos, error)
 	KickChatMember(config api.KickChatMemberConfig) (api.APIResponse, error)
+	SetWebhook(config api.WebhookConfig) (api.APIResponse, error)
+	RemoveWebhook() (api.APIResponse, error)
 }
 
 // SendTextMessage sends a basic text message back to the specified user.
@@ -44,7 +48,7 @@ func (lin *linbot) SendTextMessage(recipient int, text string) error {
 	msg := api.NewMessage(int64(recipient), text)
 	msg.ReplyMarkup = api.NewRemoveKeyboard(true)
 	msg.ParseMode = "Markdown"
-	_, err := lin.bott.Send(msg)
+	_, err := lin.bot.Send(msg)
 	return err
 }
 
@@ -59,14 +63,56 @@ type stickers struct {
 	sentstickers []string
 }
 
-//Start initializes the bot
+type bot interface {
+	Send(c api.Chattable) (api.Message, error)
+	GetUpdatesChan(config api.UpdateConfig) (api.UpdatesChannel, error)
+	UploadFile(endpoint string, params map[string]string, fieldname string, file interface{}) (api.APIResponse, error)
+	GetUserProfilePhotos(config api.UserProfilePhotosConfig) (api.UserProfilePhotos, error)
+	KickChatMember(config api.KickChatMemberConfig) (api.APIResponse, error)
+	SetWebhook(config api.WebhookConfig) (api.APIResponse, error)
+}
+
+// InitLinBot initialises the bot
+func InitLinBot() *linbot {
+
+	bot, err := api.NewBotAPI("827038812:AAHt9fPuOfg3npfl15q5qTH1BSzBjMoDOko")
+	if err != nil {
+		log.Panic(err)
+	}
+	bot.Debug = true
+	log.Printf("Authorized on account %s", bot.Self.UserName)
+
+	lin := &linbot{
+		Name: "Lin",
+		bot: bot,
+	}
+	lin.PokemonAns = " "
+	lin.setpictures()
+	return lin
+}
+
+// Listen exposes the telebot Listen API.
+func (lin *linbot) Listen(timeout int) api.UpdatesChannel {
+	u := api.NewUpdate(0)
+	u.Timeout = timeout
+	updates, err := lin.bot.GetUpdatesChan(u)
+	if err != nil {
+		log.Fatalf("error creating updates channel: %s", err)
+	}
+	return updates
+}
+
+
+//Sends a Start message
 func (lin *linbot) Start(msg *api.Message) {
+
 	text := "Hello there " + msg.From.FirstName + "!\n\n" +
 		"Im Linbot! YEEEEEEET!\n" +
 		"Im always here to /help if you need it!"
 
 	lin.SendTextMessage(int(msg.Chat.ID), text)
 }
+
 
 //Help releases list of commands for bot
 func (lin *linbot) Help(msg *api.Message) {
@@ -78,11 +124,7 @@ func (lin *linbot) Help(msg *api.Message) {
 		"/aboutme" + "\n" +
 		"/lintime" + "\n" +
 		"/wufan" + "\n" +
-		//"/surprise" + "\n" +
-		//"/talk" + "\n" +
 		"/shutup" + "\n" +
-		//"/status" + "\n" +
-		//"/time" + "\n" +
 		"/echo" + "\n" +
 		"/slurp" + "\n" +
 		"/uwu" + "\n" + "\n" +
@@ -107,8 +149,8 @@ type Pokemon struct {
 }
 
 //randomInt function to generate random ints
-func randomInt(min, max int) int {
-	return min + rand.Intn(max-min)
+func randomInt(min int, max int) int {
+	return min + rand.Intn(max - min)
 }
 
 // pokemon function to generate a random picture of a pokemon
@@ -133,7 +175,7 @@ func (lin *linbot) pokemon(msg *api.Message) {
 	lin.PokemonAns = file.Pokemons[i].Name
 
 	log.Println(lin.PokemonAns)
-	_, errr := lin.bott.Send(newmsg)
+	_, errr := lin.bot.Send(newmsg)
 	lin.SendTextMessage(int(msg.Chat.ID), "Whose that Pokemon?!"+"\n"+
 		"Type the command /pokemon along with your answer!"+"\n"+
 		"If you're lousy click here for the right /answer :/")
@@ -145,12 +187,12 @@ func (lin *linbot) pokemon(msg *api.Message) {
 // Returns a picture of user
 func (lin *linbot) handsome(msg *api.Message) {
 	photo := api.NewUserProfilePhotos(msg.From.ID)
-	photos, err := lin.bott.GetUserProfilePhotos(photo)
+	photos, err := lin.bot.GetUserProfilePhotos(photo)
 	if err != nil {
 		fmt.Println(err)
 	}
 	newmsg := api.NewPhotoShare(int64(msg.Chat.ID), photos.Photos[0][0].FileID)
-	_, errr := lin.bott.Send(newmsg)
+	_, errr := lin.bot.Send(newmsg)
 	lin.SendTextMessage(int(msg.Chat.ID), "Its you, "+msg.From.FirstName+"!!!")
 	if errr != nil {
 		fmt.Println(errr)
@@ -158,39 +200,29 @@ func (lin *linbot) handsome(msg *api.Message) {
 }
 
 func (lin *linbot) kick(msg *api.Message) {
-	/*wuf := api.ChatMemberConfig{
-		int64(-1001383326579),
-		"Unkickables",
-		"",
-		249291763,
-	}
-	*/
-
 	wuf := api.ChatMemberConfig{
-		int64(-1001275675528),
-		strconv.Itoa(int(-1001275675528)),
+		int64(-1001383326579),
+		strconv.Itoa(int(-1001383326579)),
 		"",
-		msg.From.ID,
+		int(249291763),
 	}
 	kicking := api.KickChatMemberConfig{
 		wuf,
 		int64(1),
 	}
-	resp, err := lin.bott.KickChatMember(kicking)
+	resp, err := lin.bot.KickChatMember(kicking)
 	if err != nil {
 		fmt.Println(err)
 
 	}
 	lin.SendTextMessage(int(msg.Chat.ID), resp.Description)
 
-	/*_, errr := lin.bott.Send(resp)
-	if errr != nil {
-		fmt.Println(errr)
-	}*/
-
 }
 
+<<<<<<< HEAD:linbot/linbot.go
 
+=======
+>>>>>>> d57fca17605c94610d0d1822c49ce8abc436438e:linbot/linbot.go
 // Send text message when command male is entered
 func (lin *linbot) male(msg *api.Message) {
 	text := "Hello? Gender is a spectrum okay" + "\n" + "*Gender fluid D a B*" + "\n" +
@@ -217,11 +249,12 @@ func (lin *linbot) female(msg *api.Message) {
 
 // Setting the pictures that will be sent by the /lintime function
 func (lin *linbot) setpictures() {
-	lin.pictures.arrofpictures = []string{"/Users/seanlowcy77/lin_bot/pic1.png",
-		"/Users/seanlowcy77/lin_bot/pic2.jpg",
-		"/Users/seanlowcy77/lin_bot/pic3.jpg",
-		"/Users/seanlowcy77/lin_bot/pic4.jpg",
-		"/Users/seanlowcy77/lin_bot/pic5.jpg"}
+	lin.pictures.arrofpictures = []string{"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic1.png",
+		"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic2.jpg",
+		"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic3.jpg",
+		"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic4.jpg",
+		"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic5.jpg"}
+		
 }
 
 // Returns a different picture of Lin each time function is called
@@ -235,7 +268,7 @@ func (lin *linbot) lintime(msg *api.Message) {
 	}
 	Sentpictures = append(Sentpictures, arr[i])
 	newmsg := api.NewPhotoUpload(int64(msg.Chat.ID), arr[i])
-	_, errr := lin.bott.Send(newmsg)
+	_, errr := lin.bot.Send(newmsg)
 	if errr != nil {
 		fmt.Println(errr)
 	}
@@ -275,7 +308,8 @@ func (lin *linbot) uwu(msg *api.Message) {
 
 // Funtion to send a different sticker each time from an array of stickers
 func (lin *linbot) sendsticker(msg *api.Message) {
-	stickerarr := []string{"CAADAgADzWoBAAFji0YMJh7SqwnpNXQWBA", "CAADAgADk10BAAFji0YMrp5MBok7V1oWBA", "CAADAgADlV0BAAFji0YM4jBzLzwi3FYWBA", "CAADAgAD3nABAAFji0YMLpR9QayvR8oWBA"}
+	stickerarr := []string{"CAADAgADzWoBAAFji0YMJh7SqwnpNXQWBA", "CAADAgADk10BAAFji0YMrp5MBok7V1oWBA", 
+	"CAADAgADlV0BAAFji0YM4jBzLzwi3FYWBA", "CAADAgAD3nABAAFji0YMLpR9QayvR8oWBA"}
 	n := len(stickerarr)
 	i := randomInt(0, n)
 	if len(lin.stickers.sentstickers) == n {
@@ -286,7 +320,7 @@ func (lin *linbot) sendsticker(msg *api.Message) {
 	}
 	lin.stickers.sentstickers = append(lin.stickers.sentstickers, stickerarr[i])
 	newmsg := api.NewStickerShare(int64(msg.Chat.ID), stickerarr[i])
-	_, errr := lin.bott.Send(newmsg)
+	_, errr := lin.bot.Send(newmsg)
 	if errr != nil {
 		fmt.Println(errr)
 	}
