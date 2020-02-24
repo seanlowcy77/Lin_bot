@@ -1,4 +1,4 @@
-package main
+package linbot123
 
 // Sample use of telekey
 // Change telekeysample to telekey and enter Telegram key in the " " below

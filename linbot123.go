@@ -1,4 +1,4 @@
-package linbot
+package linbot123
 
 import (
 	"encoding/json"
@@ -32,6 +32,16 @@ type photoconfig interface {
 	NewPhotoUpload(chatID int64, file interface{}) api.PhotoConfig
 }
 
+
+type bot interface {
+	Send(c api.Chattable) (api.Message, error)
+	GetUpdatesChan(config api.UpdateConfig) (api.UpdatesChannel, error)
+	UploadFile(endpoint string, params map[string]string, fieldname string, file interface{}) (api.APIResponse, error)
+	GetUserProfilePhotos(config api.UserProfilePhotosConfig) (api.UserProfilePhotos, error)
+	KickChatMember(config api.KickChatMemberConfig) (api.APIResponse, error)
+	SetWebhook(config api.WebhookConfig) (api.APIResponse, error)
+	RemoveWebhook() (api.APIResponse, error)
+}
 
 // SendTextMessage sends a basic text message back to the specified user.
 func (lin *linbot) SendTextMessage(recipient int, text string) error {
