@@ -1,4 +1,4 @@
-package linbot123
+package main
 
 import (
 
