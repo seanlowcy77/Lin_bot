@@ -3,7 +3,7 @@ package main
 import (
 
 	api "github.com/go-telegram-bot-api/telegram-bot-api"
-	"github.com/linbot123/linbot"
+	"github.com/seanlowcy77/Lin_bot/linbot"
 )
 
 func main() {
