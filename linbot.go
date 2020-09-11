@@ -62,7 +62,7 @@ type stickers struct {
 	sentstickers []string
 }
 
-// InitLinBot initialises the bot - Add in your Telegram key here
+// NOTE: InitLinBot initialises the bot - Add in your Telegram key here
 func InitLinBot() *linbot {
 
 	bot, err := api.NewBotAPI("Telegram Key")
