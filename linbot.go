@@ -273,7 +273,7 @@ func (lin *linbot) Rightpokemon(msg *api.Message) {
 }
 
 func (lin *linbot) Aboutme(msg *api.Message) {
-	str := "I was create by Sean YEEEEET" + "\n" + "https://www.facebook.com/sean.low.54"
+	str := "I was create by Sean YEEEEET" + "\n" + "https://www.linkedin.com/in/sean-low-9b8980152/"
 	lin.SendTextMessage(int(msg.Chat.ID), str)
 
 }
