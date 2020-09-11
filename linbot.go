@@ -187,6 +187,7 @@ func (lin *linbot) Handsome(msg *api.Message) {
 	}
 }
 
+// Kick a specific user - you can retrieve their userId from the console
 func (lin *linbot) Kick(msg *api.Message) {
 	wuf := api.ChatMemberConfig{
 		int64(-1001383326579),
@@ -233,8 +234,8 @@ func (lin *linbot) Female(msg *api.Message) {
 
 // Setting the pictures that will be sent by the /lintime function
 func (lin *linbot) Setpictures() {
-	lin.pictures.arrofpictures = []string{"../pics/pic1.jpeg",
-		"../pics/pic2.jpeg", "../pics/pic3.jpeg", "../pics/pic4.jpeg"}
+	lin.pictures.arrofpictures = []string{"./pics/pic1.jpeg",
+		"./pics/pic2.jpeg", "./pics/pic3.jpeg", "./pics/pic4.jpeg"}
 }
 
 // Returns a different picture of Lin each time function is called
