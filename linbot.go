@@ -65,7 +65,7 @@ type stickers struct {
 // InitLinBot initialises the bot
 func InitLinBot() *linbot {
 
-	bot, err := api.NewBotAPI("Telegram Key")
+	bot, err := api.NewBotAPI("946928172:AAGst6bzVn4wb6_5j79DFYq-0yBPHedsMQk")
 	if err != nil {
 		log.Panic(err)
 	}

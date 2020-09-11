@@ -1,16 +1,14 @@
 package main
 
 import (
-
 	api "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/seanlowcy77/Lin_bot/linbot"
 )
 
 func main() {
 
-	lin := linbot.InitLinBot();
-	updates := lin.Listen(60);
-
+	lin := linbot.InitLinBot()
+	updates := lin.Listen(60)
 
 	for update := range updates {
 
