@@ -37,14 +37,15 @@ The App has the following notable fun features amongst others:
 
 ### WhoseThatPokemon
 
-![Successful guess of pokemon](https://github.com/seanlowcy77/Lin_bot/blob/master/DemoPics/DemoPokemonPass.png)
+  <img src="https://github.com/seanlowcy77/Lin_bot/blob/master/DemoPics/DemoPokemonPass.png" width="200" />
 A successful guess of the pokemon shown
-![Failed guess of pokemon](https://github.com/seanlowcy77/Lin_bot/blob/master/DemoPics/DemoPokemonPass.png)
+
+  <img src="https://github.com/seanlowcy77/Lin_bot/blob/master/DemoPics/DemoPokemonFail.png" width="200" />
 An unsuccessful guess of the pokemon shown
 
 ### Kicking of another User
 
-![Kicking of someone](https://github.com/seanlowcy77/Lin_bot/blob/master/DemoPics/DemoKick.png)
+  <img src="https://github.com/seanlowcy77/Lin_bot/blob/master/DemoPics/DemoKick.png" width="150" />
 The bot kicking someone when a person leaves / gets kicked from the group
 
 ## Further Questions?
