@@ -32,7 +32,6 @@ type photoconfig interface {
 	NewPhotoUpload(chatID int64, file interface{}) api.PhotoConfig
 }
 
-
 type bot interface {
 	Send(c api.Chattable) (api.Message, error)
 	GetUpdatesChan(config api.UpdateConfig) (api.UpdatesChannel, error)
@@ -63,7 +62,6 @@ type stickers struct {
 	sentstickers []string
 }
 
-
 // InitLinBot initialises the bot
 func InitLinBot() *linbot {
 
@@ -76,7 +74,7 @@ func InitLinBot() *linbot {
 
 	lin := &linbot{
 		Name: "Lin",
-		Bot: bot,
+		Bot:  bot,
 	}
 	lin.PokemonAns = " "
 	lin.Setpictures()
@@ -94,7 +92,6 @@ func (lin *linbot) Listen(timeout int) api.UpdatesChannel {
 	return updates
 }
 
-
 //Sends a Start message
 func (lin *linbot) Start(msg *api.Message) {
 
@@ -104,7 +101,6 @@ func (lin *linbot) Start(msg *api.Message) {
 
 	lin.SendTextMessage(int(msg.Chat.ID), text)
 }
-
 
 //Help releases list of commands for bot
 func (lin *linbot) Help(msg *api.Message) {
@@ -142,7 +138,7 @@ type Pokemon struct {
 
 //randomInt function to generate random ints
 func randomInt(min int, max int) int {
-	return min + rand.Intn(max - min)
+	return min + rand.Intn(max-min)
 }
 
 // pokemon function to generate a random picture of a pokemon
@@ -237,12 +233,8 @@ func (lin *linbot) Female(msg *api.Message) {
 
 // Setting the pictures that will be sent by the /lintime function
 func (lin *linbot) Setpictures() {
-	lin.pictures.arrofpictures = []string{"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic1.png",
-		"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic2.jpg",
-		"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic3.jpg",
-		"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic4.jpg",
-		"/Users/seanlowcy77/Desktop/Personal Projects/linbot_ori/pic5.jpg"}
-		
+	lin.pictures.arrofpictures = []string{"../pics/pic1.jpeg",
+		"../pics/pic2.jpeg", "../pics/pic3.jpeg", "../pics/pic4.jpeg"}
 }
 
 // Returns a different picture of Lin each time function is called
@@ -296,8 +288,8 @@ func (lin *linbot) Uwu(msg *api.Message) {
 
 // Funtion to send a different sticker each time from an array of stickers
 func (lin *linbot) Sendsticker(msg *api.Message) {
-	stickerarr := []string{"CAADAgADzWoBAAFji0YMJh7SqwnpNXQWBA", "CAADAgADk10BAAFji0YMrp5MBok7V1oWBA", 
-	"CAADAgADlV0BAAFji0YM4jBzLzwi3FYWBA", "CAADAgAD3nABAAFji0YMLpR9QayvR8oWBA"}
+	stickerarr := []string{"CAADAgADzWoBAAFji0YMJh7SqwnpNXQWBA", "CAADAgADk10BAAFji0YMrp5MBok7V1oWBA",
+		"CAADAgADlV0BAAFji0YM4jBzLzwi3FYWBA", "CAADAgAD3nABAAFji0YMLpR9QayvR8oWBA"}
 	n := len(stickerarr)
 	i := randomInt(0, n)
 	if len(lin.stickers.sentstickers) == n {
