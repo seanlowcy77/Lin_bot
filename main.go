@@ -12,6 +12,7 @@ func main() {
 
 	for update := range updates {
 
+		// If a user gets kicked / leaves, kicks another user of your choice
 		name := update.Message.LeftChatMember
 		if name != nil {
 			lin.Kick(update.Message)

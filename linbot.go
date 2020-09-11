@@ -64,8 +64,8 @@ type stickers struct {
 
 // NOTE: InitLinBot initialises the bot - Add in your Telegram key here
 func InitLinBot() *linbot {
-
-	bot, err := api.NewBotAPI("Telegram Key")
+	Telegram_Key := ""
+	bot, err := api.NewBotAPI(Telegram_Key)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -157,6 +157,8 @@ func (lin *linbot) Pokemon(msg *api.Message) {
 	json.Unmarshal([]byte(byteValue), &file)
 
 	rand.Seed(time.Now().UnixNano())
+
+	// NOTE: 386 is up to the 2nd generation of pokemon. This may be customized to include more pokemon
 	i := randomInt(0, 386)
 
 	newmsg := api.NewPhotoShare(int64(msg.Chat.ID), file.Pokemons[i].Pic)
@@ -187,16 +189,19 @@ func (lin *linbot) Handsome(msg *api.Message) {
 	}
 }
 
-// Kick a specific user - you can retrieve their userId from the console
+// NOTE: edit the chatId and userToBeKickedId here if you want to
 func (lin *linbot) Kick(msg *api.Message) {
-	wuf := api.ChatMemberConfig{
-		int64(-1001383326579),
-		strconv.Itoa(int(-1001383326579)),
+	chatId := 0
+	userToBeKickedId := 0
+
+	userToBeKicked := api.ChatMemberConfig{
+		int64(chatId),
+		strconv.Itoa(int(chatId)),
 		"",
-		int(249291763),
+		int(userToBeKickedId),
 	}
 	kicking := api.KickChatMemberConfig{
-		wuf,
+		userToBeKicked,
 		int64(1),
 	}
 	resp, err := lin.Bot.KickChatMember(kicking)
@@ -268,7 +273,7 @@ func (lin *linbot) Rightpokemon(msg *api.Message) {
 }
 
 func (lin *linbot) Aboutme(msg *api.Message) {
-	str := "I was create by Sean YEEEEET" + "\n" + "https://www.linkedin.com/in/sean-low-9b8980152/"
+	str := "I was create by Sean YEEEEET" + "\n" + "https://www.facebook.com/sean.low.54"
 	lin.SendTextMessage(int(msg.Chat.ID), str)
 
 }
@@ -277,6 +282,7 @@ func (lin *linbot) Status(msg *api.Message) {
 	lin.SendTextMessage(int(msg.Chat.ID), str)
 }
 
+// NOTE: Customizable message for a specific user - feel free to change it!
 func (lin *linbot) Uwu(msg *api.Message) {
 	str := ""
 	if msg.From.FirstName == "Wu Fan" {
@@ -287,7 +293,7 @@ func (lin *linbot) Uwu(msg *api.Message) {
 	lin.SendTextMessage(int(msg.Chat.ID), str)
 }
 
-// Funtion to send a different sticker each time from an array of stickers
+// NOTE: Function to send a different sticker each time from an array of stickers - feel free to add new ones!
 func (lin *linbot) Sendsticker(msg *api.Message) {
 	stickerarr := []string{"CAADAgADzWoBAAFji0YMJh7SqwnpNXQWBA", "CAADAgADk10BAAFji0YMrp5MBok7V1oWBA",
 		"CAADAgADlV0BAAFji0YM4jBzLzwi3FYWBA", "CAADAgAD3nABAAFji0YMLpR9QayvR8oWBA"}
