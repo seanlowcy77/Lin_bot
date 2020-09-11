@@ -18,7 +18,22 @@ The App has the following notable fun features amongst others:
 
 1. Ensure that you have installed golang. More info may be found [here](https://golang.org/doc/install)
 2. Change the `Telegram_Key` variable in `linbot.go`
-3. enter `go run main.go` in the terminal
+3. All Go projects should go under a folder called GOPATH. So we have to tell your machine where that is, by setting up this path in your environment variables. Enter:
+
+```
+echo "export GOPATH=$HOME/go" >> ~/.bashrc
+source ~/.bashrc
+```
+
+Then we verify that Golang and GOPATH are set up properly by:
+
+```
+$ echo $GOPATH
+/home/your_username/go # default GOPATH
+```
+
+4. Enter `go get github.com/go-telegram-bot-api/telegram-bot-api` to install telegram bot api dependency
+5. Enter `go run main.go` in the terminal
 
 ### Customizable Features
 
