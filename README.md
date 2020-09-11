@@ -17,7 +17,7 @@ The App has the following notable fun features amongst others:
 ## 2. Quick Start
 
 1. Ensure that you have installed golang. More info may be found [here](https://golang.org/doc/install)
-2. Change the `Telegram_Key` variable in `linbot.go`
+2. Change the `Telegram_Key` variable in `linbot.go`. You can create a new bot key using `BotFather`
 3. All Go projects should go under a folder called GOPATH. So we have to tell your machine where that is, by setting up this path in your environment variables. Enter:
 
 ```
