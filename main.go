@@ -1,4 +1,4 @@
-package linbot
+package main
 
 import (
 	api "github.com/go-telegram-bot-api/telegram-bot-api"

@@ -14,7 +14,7 @@ import (
 	api "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-type linbot struct {
+type Linbot struct {
 	Name       string
 	Bot        bot
 	photo      photoconfig
@@ -43,7 +43,7 @@ type bot interface {
 }
 
 // SendTextMessage sends a basic text message back to the specified user.
-func (lin *linbot) SendTextMessage(recipient int, text string) error {
+func (lin *Linbot) SendTextMessage(recipient int, text string) error {
 	msg := api.NewMessage(int64(recipient), text)
 	msg.ReplyMarkup = api.NewRemoveKeyboard(true)
 	msg.ParseMode = "Markdown"
@@ -63,7 +63,7 @@ type stickers struct {
 }
 
 // NOTE: InitLinBot initialises the bot - Add in your Telegram key here
-func InitLinBot() *linbot {
+func InitLinBot() *Linbot {
 	Telegram_Key := ""
 	bot, err := api.NewBotAPI(Telegram_Key)
 	if err != nil {
@@ -72,7 +72,7 @@ func InitLinBot() *linbot {
 	bot.Debug = true
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-	lin := &linbot{
+	lin := &Linbot{
 		Name: "Lin",
 		Bot:  bot,
 	}
@@ -82,7 +82,7 @@ func InitLinBot() *linbot {
 }
 
 // Listen exposes the telebot Listen API.
-func (lin *linbot) Listen(timeout int) api.UpdatesChannel {
+func (lin *Linbot) Listen(timeout int) api.UpdatesChannel {
 	u := api.NewUpdate(0)
 	u.Timeout = timeout
 	updates, err := lin.Bot.GetUpdatesChan(u)
@@ -93,7 +93,7 @@ func (lin *linbot) Listen(timeout int) api.UpdatesChannel {
 }
 
 //Sends a Start message
-func (lin *linbot) Start(msg *api.Message) {
+func (lin *Linbot) Start(msg *api.Message) {
 
 	text := "Hello there " + msg.From.FirstName + "!\n\n" +
 		"Im Linbot! YEEEEEEET!\n" +
@@ -103,7 +103,7 @@ func (lin *linbot) Start(msg *api.Message) {
 }
 
 //Help releases list of commands for bot
-func (lin *linbot) Help(msg *api.Message) {
+func (lin *Linbot) Help(msg *api.Message) {
 
 	text := "UwU I'm really useful if you need my help " + msg.From.FirstName + " \n" +
 		"Here's some things I can do :)" + "\n" + "\n" +
@@ -142,7 +142,7 @@ func randomInt(min int, max int) int {
 }
 
 // pokemon function to generate a random picture of a pokemon
-func (lin *linbot) Pokemon(msg *api.Message) {
+func (lin *Linbot) Pokemon(msg *api.Message) {
 	jsonFile, err := os.Open("pokemon.json")
 	// if we os.Open returns an error then handle it
 	if err != nil {
@@ -175,7 +175,7 @@ func (lin *linbot) Pokemon(msg *api.Message) {
 }
 
 // Returns a picture of user
-func (lin *linbot) Handsome(msg *api.Message) {
+func (lin *Linbot) Handsome(msg *api.Message) {
 	photo := api.NewUserProfilePhotos(msg.From.ID)
 	photos, err := lin.Bot.GetUserProfilePhotos(photo)
 	if err != nil {
@@ -190,7 +190,7 @@ func (lin *linbot) Handsome(msg *api.Message) {
 }
 
 // NOTE: edit the chatId and userToBeKickedId here if you want to
-func (lin *linbot) Kick(msg *api.Message) {
+func (lin *Linbot) Kick(msg *api.Message) {
 	chatId := 0
 	userToBeKickedId := 0
 
@@ -214,7 +214,7 @@ func (lin *linbot) Kick(msg *api.Message) {
 }
 
 // Send text message when command male is entered
-func (lin *linbot) Male(msg *api.Message) {
+func (lin *Linbot) Male(msg *api.Message) {
 	text := "Hello? Gender is a spectrum okay" + "\n" + "*Gender fluid D a B*" + "\n" +
 		"Down with the PaTriAchY >:( Not everyone is solely 1 gender." + "\n" + "\n" +
 		"click /here to find out yours"
@@ -222,7 +222,7 @@ func (lin *linbot) Male(msg *api.Message) {
 }
 
 // Returns a random number% when male
-func (lin *linbot) Malegenderchecker(msg *api.Message) {
+func (lin *Linbot) Malegenderchecker(msg *api.Message) {
 	rand.Seed(time.Now().UnixNano())
 	i := randomInt(0, 100)
 	text := "According to my CaLcuLatioNSSSSS" + "\n" +
@@ -232,19 +232,19 @@ func (lin *linbot) Malegenderchecker(msg *api.Message) {
 }
 
 // Send text message when command female is entered
-func (lin *linbot) Female(msg *api.Message) {
+func (lin *Linbot) Female(msg *api.Message) {
 	text := "You go girl!"
 	lin.SendTextMessage(int(msg.Chat.ID), text)
 }
 
 // Setting the pictures that will be sent by the /lintime function
-func (lin *linbot) Setpictures() {
+func (lin *Linbot) Setpictures() {
 	lin.pictures.arrofpictures = []string{"./pics/pic1.jpeg",
 		"./pics/pic2.jpeg", "./pics/pic3.jpeg", "./pics/pic4.jpeg"}
 }
 
 // Returns a different picture of Lin each time function is called
-func (lin *linbot) Lintime(msg *api.Message) {
+func (lin *Linbot) Lintime(msg *api.Message) {
 	arr := lin.pictures.arrofpictures
 	n := len(arr)
 	i := randomInt(0, n)
@@ -261,7 +261,7 @@ func (lin *linbot) Lintime(msg *api.Message) {
 }
 
 // Function when the answer is correctly given
-func (lin *linbot) Rightpokemon(msg *api.Message) {
+func (lin *Linbot) Rightpokemon(msg *api.Message) {
 	str := strings.Replace(msg.Text, "/pokemon ", "", 1)
 	if strings.ToLower(str) == strings.ToLower(lin.PokemonAns) {
 		lin.SendTextMessage(int(msg.Chat.ID), "That's right its "+lin.PokemonAns+"!!! WOOOOOOO"+"\n"+"/playagain ?")
@@ -272,18 +272,18 @@ func (lin *linbot) Rightpokemon(msg *api.Message) {
 	}
 }
 
-func (lin *linbot) Aboutme(msg *api.Message) {
+func (lin *Linbot) Aboutme(msg *api.Message) {
 	str := "I was created by Sean YEEEEET" + "\n" + "https://www.linkedin.com/in/sean-low-9b8980152/"
 	lin.SendTextMessage(int(msg.Chat.ID), str)
 
 }
-func (lin *linbot) Status(msg *api.Message) {
+func (lin *Linbot) Status(msg *api.Message) {
 	str := "I love yeeting with you " + msg.Chat.FirstName
 	lin.SendTextMessage(int(msg.Chat.ID), str)
 }
 
 // NOTE: Customizable message for a specific user - feel free to change it!
-func (lin *linbot) Uwu(msg *api.Message) {
+func (lin *Linbot) Uwu(msg *api.Message) {
 	str := ""
 	if msg.From.FirstName == "Wu Fan" {
 		str = "This is especially for u <3 Hey UWU Fan"
@@ -294,7 +294,7 @@ func (lin *linbot) Uwu(msg *api.Message) {
 }
 
 // NOTE: Function to send a different sticker each time from an array of stickers - feel free to add new ones!
-func (lin *linbot) Sendsticker(msg *api.Message) {
+func (lin *Linbot) Sendsticker(msg *api.Message) {
 	stickerarr := []string{"CAADAgADzWoBAAFji0YMJh7SqwnpNXQWBA", "CAADAgADk10BAAFji0YMrp5MBok7V1oWBA",
 		"CAADAgADlV0BAAFji0YM4jBzLzwi3FYWBA", "CAADAgAD3nABAAFji0YMLpR9QayvR8oWBA"}
 	n := len(stickerarr)
@@ -314,13 +314,13 @@ func (lin *linbot) Sendsticker(msg *api.Message) {
 }
 
 // Function to echo something
-func (lin *linbot) Echo(msg *api.Message) {
+func (lin *Linbot) Echo(msg *api.Message) {
 	str1 := strings.Replace(msg.Text, "/echo", "", 1)
 	lin.SendTextMessage(int(msg.Chat.ID), str1)
 }
 
 // Function to provide a countdown
-func (lin *linbot) Time(msg *api.Message) {
+func (lin *Linbot) Time(msg *api.Message) {
 	str1 := strings.Replace(msg.Text, "/time ", "", 1)
 	seconds, err := strconv.Atoi(str1)
 	if err != nil {
@@ -335,7 +335,7 @@ func (lin *linbot) Time(msg *api.Message) {
 	}
 }
 
-func (lin *linbot) Surprise(msg *api.Message) {
+func (lin *Linbot) Surprise(msg *api.Message) {
 	text := "YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET"
 	lin.SendTextMessage(int(msg.Chat.ID), text)
 
